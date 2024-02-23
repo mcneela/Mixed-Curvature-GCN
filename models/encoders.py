@@ -58,8 +58,10 @@ class HNN(Encoder):
             in_dim, out_dim = dims[i], dims[i + 1]
             act = acts[i]
             hnn_layers.append(
-                    hyp_layers.HNNLayer(
-                            self.manifold, in_dim, out_dim, self.c, args.dropout, act, args.bias)
+                hyp_layers.HNNLayer(self.manifold, 
+                                    in_dim, out_dim, 
+                                    self.c, args.dropout, 
+                                    act, args.bias)
             )
         self.layers = nn.Sequential(*hnn_layers)
         self.encode_graph = False
@@ -155,7 +157,7 @@ class Shallow(Encoder):
     Shallow Embedding method.
     Learns embeddings or loads pretrained embeddings and uses an MLP for classification.
     """
-    def __init__(self, c, args):
+    def __init__(self, c: float, args):
         super(Shallow, self).__init__(c)
         self.manifold = getattr(manifolds, args.manifold)()
         self.use_feats = args.use_feats

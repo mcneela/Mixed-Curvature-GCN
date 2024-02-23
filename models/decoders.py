@@ -11,13 +11,11 @@ class Decoder(nn.Module):
     """
     Decoder abstract class for node classification tasks.
     """
-
     def __init__(self, c):
         super(Decoder, self).__init__()
         self.c = c
 
     def decode(self, x, adj):
-        #print("decoder super")
         if self.decode_adj:
             input = (x, adj)
             probs, _ = self.cls.forward(input)
@@ -30,7 +28,6 @@ class GCNDecoder(Decoder):
     """
     Graph Convolution Decoder.
     """
-
     def __init__(self, c, args):
         super(GCNDecoder, self).__init__(c)
         act = lambda x: x
@@ -42,7 +39,6 @@ class GATDecoder(Decoder):
     """
     Graph Attention Decoder.
     """
-
     def __init__(self, c, args):
         super(GATDecoder, self).__init__(c)
         self.cls = GraphAttentionLayer(args.dim, args.n_classes, args.dropout, F.elu, args.alpha, 1, True)
@@ -53,7 +49,6 @@ class LinearDecoder(Decoder):
     """
     MLP Decoder for Hyperbolic/Euclidean node classification models.
     """
-
     def __init__(self, c, args):
         super(LinearDecoder, self).__init__(c)
 
@@ -72,7 +67,6 @@ class LinearDecoder(Decoder):
                 else:
                     raise ValueError("Invalid string in the manifold")
                 count = int(word[i+1])
-                #for j in range(count):
                 manifold_array.append((getattr(manifolds, man_name)(),count))
                     
             self.manifold_name = "productManifold"
@@ -81,7 +75,6 @@ class LinearDecoder(Decoder):
         else:
             self.manifold = getattr(manifolds, args.manifold)()
 
-        #self.manifold = getattr(manifolds, args.manifold)()
         self.input_dim = args.dim
         self.output_dim = args.n_classes
         self.bias = args.bias
@@ -94,7 +87,7 @@ class LinearDecoder(Decoder):
 
     def extra_repr(self):
         return 'in_features={}, out_features={}, bias={}, c={}'.format(
-                self.input_dim, self.output_dim, self.bias, self.c
+            self.input_dim, self.output_dim, self.bias, self.c
         )
 
 
